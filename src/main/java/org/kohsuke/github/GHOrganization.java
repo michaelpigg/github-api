@@ -487,7 +487,9 @@ public class GHOrganization extends GHPerson {
         /** The triage. */
         TRIAGE,
         /** The pull. */
-        PULL
+        PULL,
+        /** Unknown, before we add the new permission to the enum */
+        UNKNOWN
     }
 
     /**
@@ -655,7 +657,7 @@ public class GHOrganization extends GHPerson {
     }
 
     /**
-     * Gets all the open pull requests in this organizataion.
+     * Gets all the open pull requests in this organization.
      *
      * @return the pull requests
      * @throws IOException
@@ -781,5 +783,12 @@ public class GHOrganization extends GHPerson {
      */
     public GHHook createWebHook(URL url) throws IOException {
         return createWebHook(url, null);
+    }
+
+    public GHPreReceiveHook configurePreReceiveHook(long id,
+            GHPreReceiveHookEnforcement enforcement,
+            boolean downstreamConfigurable) throws IOException {
+        return GHPreReceiveHooks.orgContext(this)
+                .configurePreReceiveHook(new GHOrgPreReceiveHook(id, enforcement, downstreamConfigurable));
     }
 }
